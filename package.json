@@ -42,8 +42,8 @@
     },
     "files": [
         "build/src",
-        "build/index.d.ts",
-        "build/index.js"
+        "build/providers",
+        "build/adonis-typings"
     ],
     "mrmConfig": {},
     "adonisjs": {
