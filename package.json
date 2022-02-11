@@ -12,7 +12,7 @@
         "format": "prettier --write .",
         "prepare": "husky install"
     },
-    "author": "",
+    "author": "chirgjin <chirgjin@gmail.com>",
     "license": "UNLICENSED",
     "devDependencies": {
         "@adonisjs/assembler": "^5.4.1",
@@ -33,6 +33,7 @@
         "lint-staged": "^12.3.3",
         "mrm": "^3.0.10",
         "prettier": "^2.5.1",
+        "reflect-metadata": "^0.1.13",
         "typescript": "^4.5.5"
     },
     "peerDependencies": {
@@ -52,9 +53,6 @@
         ]
     },
     "typings": "./build/adonis-typings/index.d.ts",
-    "dependencies": {
-        "reflect-metadata": "^0.1.13"
-    },
     "lint-staged": {
         "*.ts": "eslint --cache --fix"
     }
