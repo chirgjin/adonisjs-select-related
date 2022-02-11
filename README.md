@@ -59,6 +59,27 @@ export default class UsersController {
 }
 ```
 
+Example Output:
+```json
+[
+   {
+      "id":1,
+      "email":"Nicole55@hotmail.com",
+      "name":"Jonathon",
+      "created_at":"2022-02-12T03:10:40.000+05:30",
+      "updated_at":"2022-02-12T03:10:40.000+05:30",
+      "profile":{
+         "id":1,
+         "user_id":1,
+         "phone_number":"(671) 991-3800 x968",
+         "date_of_birth":"2021-05-11",
+         "created_at":"2022-02-12T03:10:40.000+05:30",
+         "updated_at":"2022-02-12T03:10:40.000+05:30"
+      }
+   }
+]
+```
+
 
 ## More examples
 Take a look at [chirgjin/adonisjs-select-related-example](https://github.com/chirgjin/adonisjs-select-related-example) for some examples of select related.
