@@ -30,6 +30,7 @@
         "eslint-plugin-import": "^2.25.4",
         "eslint-plugin-prettier": "^4.0.0",
         "husky": "^7.0.4",
+        "lint-staged": "^12.3.3",
         "mrm": "^3.0.10",
         "prettier": "^2.5.1",
         "typescript": "^4.5.5"
@@ -53,5 +54,8 @@
     "typings": "./build/adonis-typings/index.d.ts",
     "dependencies": {
         "reflect-metadata": "^0.1.13"
+    },
+    "lint-staged": {
+        "*.ts": "eslint --cache --fix"
     }
 }
