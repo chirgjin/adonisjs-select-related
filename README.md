@@ -58,3 +58,7 @@ export default class UsersController {
     }
 }
 ```
+
+
+## More examples
+Take a look at [chirgjin/adonisjs-select-related-example](https://github.com/chirgjin/adonisjs-select-related-example) for some examples of select related.
