@@ -1,6 +1,6 @@
 {
     "name": "adonisjs-select-related",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Select related functionality for lucid",
     "main": "build/providers/SelectRelatedProvider.js",
     "scripts": {
