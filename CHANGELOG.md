@@ -1,3 +1,12 @@
+## <small>1.0.2 (2022-02-22)</small>
+
+* chore: add keywords, homepage etc ([9029a60](https://github.com/chirgjin/adonisjs-select-related/commit/9029a60))
+* fix: disable select related query builder for models without mixin ([21f9e99](https://github.com/chirgjin/adonisjs-select-related/commit/21f9e99))
+* docs: add example output ([5aace35](https://github.com/chirgjin/adonisjs-select-related/commit/5aace35))
+* docs: add link to example repo ([f00b5f3](https://github.com/chirgjin/adonisjs-select-related/commit/f00b5f3))
+
+
+
 ## <small>1.0.1 (2022-02-11)</small>
 
 * fix: add adonis-typings to published files ([78c03ce](https://chirgjin/commits/78c03ce))
