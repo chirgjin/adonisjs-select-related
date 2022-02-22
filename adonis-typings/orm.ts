@@ -28,7 +28,7 @@ declare module '@ioc:Adonis/Lucid/Orm' {
     type SelectRelatedQueryBuilder<Model extends LucidModel> = {
         [Key in keyof SelectRelatedMethods<Model> as Model extends SelectRelatedContract<Model>
             ? Key
-            : Key]: SelectRelatedMethods<Model>[Key]
+            : never]: SelectRelatedMethods<Model>[Key]
     }
 
     interface ModelQueryBuilderContract<
