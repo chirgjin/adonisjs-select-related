@@ -1,6 +1,11 @@
 {
     "name": "adonisjs-select-related",
     "version": "1.0.1",
+    "keywords": [
+        "adonisjs",
+        "adonis-lucid",
+        "select-related"
+    ],
     "description": "Select related functionality for lucid",
     "main": "build/providers/SelectRelatedProvider.js",
     "scripts": {
@@ -14,6 +19,14 @@
     },
     "author": "chirgjin <chirgjin@gmail.com>",
     "license": "UNLICENSED",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/chirgjin/adonisjs-select-related.git"
+    },
+    "bugs": {
+        "url": "https://github.com/chirgjin/adonisjs-select-related/issues"
+    },
+    "homepage": "https://github.com/chirgjin/adonisjs-select-related#readme",
     "devDependencies": {
         "@adonisjs/assembler": "^5.4.1",
         "@adonisjs/core": "^5.4.2",
