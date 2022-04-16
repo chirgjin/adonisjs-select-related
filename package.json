@@ -15,7 +15,8 @@
         "build": "node -r @adonisjs/require-ts/build/register build.ts",
         "prepublishOnly": "yarn compile",
         "format": "prettier --write .",
-        "prepare": "husky install"
+        "prepare": "husky install",
+        "make:changelog": "conventional-changelog -i CHANGELOG.md -s"
     },
     "author": "chirgjin <chirgjin@gmail.com>",
     "license": "UNLICENSED",
@@ -30,7 +31,7 @@
     "devDependencies": {
         "@adonisjs/assembler": "^5.4.1",
         "@adonisjs/core": "^5.4.2",
-        "@adonisjs/lucid": "^16.3.2",
+        "@adonisjs/lucid": "^17.2.0",
         "@adonisjs/mrm-preset": "^5.0.2",
         "@adonisjs/require-ts": "^2.0.9",
         "@commitlint/cli": "^16.1.0",
@@ -51,7 +52,7 @@
     },
     "peerDependencies": {
         "@adonisjs/core": "^5.4.0",
-        "@adonisjs/lucid": "^16.2.0"
+        "@adonisjs/lucid": ">=16.0.0 <18.0.0"
     },
     "files": [
         "build/src",
