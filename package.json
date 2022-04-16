@@ -1,6 +1,6 @@
 {
     "name": "adonisjs-select-related",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "keywords": [
         "adonisjs",
         "adonis-lucid",
@@ -13,7 +13,7 @@
         "lint": "eslint . --ext=.ts --fix",
         "compile": "yarn lint && yarn format && yarn build",
         "build": "node -r @adonisjs/require-ts/build/register build.ts",
-        "prepublishOnly": "yarn compile",
+        "prepublishOnly": "yarn compile && yarn make:changelog",
         "format": "prettier --write .",
         "prepare": "husky install",
         "make:changelog": "conventional-changelog -i CHANGELOG.md -s"

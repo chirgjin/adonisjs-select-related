@@ -1,3 +1,9 @@
+## <small>1.0.3 (2022-04-16)</small>
+
+* chore: install conventional-changelog-cli ([00d3082](https://github.com/chirgjin/adonisjs-select-related/commit/00d3082))
+* chore: upgrade lucid version ([6f83d14](https://github.com/chirgjin/adonisjs-select-related/commit/6f83d14))
+
+
 ## <small>1.0.2 (2022-02-22)</small>
 
 * chore: add keywords, homepage etc ([9029a60](https://github.com/chirgjin/adonisjs-select-related/commit/9029a60))
