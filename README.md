@@ -1,7 +1,7 @@
 # Adonis Select Related
 
 This addon adds the functionality to preload relations via joins instead of a separate query. This package is heavily inspired from python's [Django Framework](https://www.djangoproject.com/)
-> Works with `@adonisjs/lucid^16.*.*`
+> Works with `@adonisjs/lucid > 16.*.*, 17.*.*`
 
 ## Introduction
 
