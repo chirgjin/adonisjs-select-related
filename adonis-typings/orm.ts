@@ -26,7 +26,7 @@ declare module '@ioc:Adonis/Lucid/Orm' {
      * doesn't have selectRelatedMixin
      */
     type SelectRelatedQueryBuilder<Model extends LucidModel> = {
-        [Key in keyof SelectRelatedMethods<Model> as Model extends SelectRelatedContract<Model>
+        [Key in keyof SelectRelatedMethods<Model> as Model extends SelectRelatedContract<LucidModel>
             ? Key
             : never]: SelectRelatedMethods<Model>[Key]
     }
