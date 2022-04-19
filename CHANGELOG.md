@@ -1,3 +1,13 @@
+## <small>1.0.4 (2022-04-19)</small>
+
+* docs: update version constraints ([17918dd](https://github.com/chirgjin/adonisjs-select-related/commit/17918dd))
+* fix: select related query builder type ([17ce854](https://github.com/chirgjin/adonisjs-select-related/commit/17ce854))
+* chore: install conventional-changelog-cli ([00d3082](https://github.com/chirgjin/adonisjs-select-related/commit/00d3082))
+* chore: publish 1.0.3 ([babb6eb](https://github.com/chirgjin/adonisjs-select-related/commit/babb6eb))
+* chore: upgrade lucid version ([6f83d14](https://github.com/chirgjin/adonisjs-select-related/commit/6f83d14))
+
+
+
 ## <small>1.0.3 (2022-04-16)</small>
 
 * chore: install conventional-changelog-cli ([00d3082](https://github.com/chirgjin/adonisjs-select-related/commit/00d3082))
