@@ -9,7 +9,7 @@ jobs:
   build:
     <<: *defaults
     steps:
-      - run: apk add py3-pip
+      - run: apk add g++ make py3-pip
       - checkout
       - restore_cache:
           keys:
