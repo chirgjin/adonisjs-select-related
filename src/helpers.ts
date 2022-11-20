@@ -41,14 +41,14 @@ export function sideloadColumns<
     RelatedModel extends LucidModel
 >(
     query: ModelQueryBuilderContract<Model>,
-    columnMapping: Record<string, string>,
-    sideloadedRelations: SideloadedRelations<RelatedModel>
+    sideloadedRelations: SideloadedRelations<RelatedModel>,
+    columnMapping: Record<string, string> = {}
 ) {
     for (const relationName in sideloadedRelations) {
         const sideloadedRelation = sideloadedRelations[relationName]
 
         if (!sideloadedRelation.sideload) {
-            return
+            return columnMapping
         }
 
         const colPrefix = `_${sideloadedRelation.tableName}`
@@ -77,11 +77,13 @@ export function sideloadColumns<
         if (sideloadedRelation.subRelations) {
             sideloadColumns(
                 query,
-                columnMapping,
-                sideloadedRelation.subRelations
+                sideloadedRelation.subRelations,
+                columnMapping
             )
         }
     }
+
+    return columnMapping
 }
 
 /**

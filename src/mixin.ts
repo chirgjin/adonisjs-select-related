@@ -46,9 +46,7 @@ export default function selectRelatedMixin<
                 query.select(`${query.model.table}.*`)
             }
 
-            const columnMapping: Record<string, string> = {}
-
-            sideloadColumns(query, columnMapping, $sideloadedRelations)
+            const columnMapping = sideloadColumns(query, $sideloadedRelations)
 
             query.rowTransformer((row: SelectRelatedMixin) => {
                 row.$sideloadedRelations = $sideloadedRelations
