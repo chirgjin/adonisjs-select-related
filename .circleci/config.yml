@@ -3,7 +3,7 @@ version: 2.1
 defaults: &defaults
   working_directory: ~/app
   docker:
-    - image: node:16.0.0-alpine
+    - image: node:16-alpine
 
 jobs:
   build:
