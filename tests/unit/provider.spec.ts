@@ -1,11 +1,14 @@
 import SelectRelatedProvider from '../../providers/SelectRelatedProvider'
 import selectRelatedMixin from '../../src/mixin'
-import { getSelectRelatedModels } from '../utils'
+import { getSelectRelatedModels, setupApplication } from '../utils'
 import { test } from '@japa/runner'
 import sinon from 'sinon'
 
 test.group('SelectRelatedProvider | register', () => {
-    test('should register binding successfully', ({ assert, application }) => {
+    test('should register binding successfully', async ({ assert }) => {
+        // setup application separately in each test to ensure that
+        // bindings generated in one test do not affect other tests
+        const application = await setupApplication()
         const provider = new SelectRelatedProvider(application)
 
         provider.register()
@@ -29,11 +32,11 @@ test.group('SelectRelatedProvider | boot', (group) => {
 
     test('Should register selectRelated macro successfully', async ({
         assert,
-        application,
     }) => {
+        const application = await setupApplication()
         const provider = new SelectRelatedProvider(application)
 
-        const spy = sinon.spy(
+        const stub = sinon.stub(
             application.container.use('Adonis/Lucid/Database')
                 .ModelQueryBuilder,
             'macro'
@@ -41,13 +44,13 @@ test.group('SelectRelatedProvider | boot', (group) => {
 
         await provider.boot()
 
-        assert.isTrue(spy.calledOnceWith('selectRelated', sinon.match.func))
+        assert.isTrue(stub.calledOnceWith('selectRelated', sinon.match.func))
     })
 
     test('Registered macro should call selectRelated helper', async ({
         assert,
-        application,
     }) => {
+        const application = await setupApplication()
         const provider = new SelectRelatedProvider(application)
         const queryBuilder = await import('../../src/querybuilder')
         const stub = sinon.stub(queryBuilder, 'selectRelated')
