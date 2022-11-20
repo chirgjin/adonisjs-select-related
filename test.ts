@@ -1,9 +1,13 @@
 import { assert } from '@japa/assert'
 import { runFailedTests } from '@japa/run-failed-tests'
-import { processCliArgs, configure, run } from '@japa/runner'
+import { configure, processCliArgs, run, TestContext } from '@japa/runner'
 import { specReporter } from '@japa/spec-reporter'
-import { remove } from 'fs-extra'
-import { join } from 'path'
+
+import { ApplicationContract } from '@ioc:Adonis/Core/Application'
+
+import { cleanup, getModels, setupApplication } from './tests/utils'
+
+let app: ApplicationContract
 
 /*
 |--------------------------------------------------------------------------
@@ -25,9 +29,20 @@ configure({
         plugins: [assert(), runFailedTests()],
         reporters: [specReporter()],
         importer: (filePath: string) => import(filePath),
+        setup: [
+            async () => {
+                app = await setupApplication()
+                const models = getModels(app)
+
+                TestContext.getter('application', () => app)
+                TestContext.getter('models', () => models)
+            },
+        ],
         teardown: [
             async () => {
-                await remove(join(__dirname, 'tests', 'tmp'))
+                if (app) {
+                    await cleanup(app)
+                }
             },
         ],
     },
