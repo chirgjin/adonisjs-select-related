@@ -145,7 +145,9 @@ export function getModels(
         @column()
         public password: string
 
-        @column.dateTime()
+        @column.dateTime({
+            autoCreate: true,
+        })
         public createdAt: DateTime
 
         @hasMany(() => TodoList)
@@ -167,7 +169,9 @@ export function getModels(
         @column()
         public title: string
 
-        @column.dateTime()
+        @column.dateTime({
+            autoCreate: true,
+        })
         public createdAt: DateTime
 
         @hasMany(() => TodoListItem)

@@ -5,7 +5,7 @@ import { specReporter } from '@japa/spec-reporter'
 
 import { ApplicationContract } from '@ioc:Adonis/Core/Application'
 
-import { setupApplication, cleanup, getModels } from './utils'
+import { cleanup, createTables, getModels, setupApplication } from './utils'
 
 let app: ApplicationContract
 
@@ -33,6 +33,8 @@ configure({
             async () => {
                 app = await setupApplication()
                 const models = getModels(app)
+
+                await createTables(app)
 
                 TestContext.getter('application', () => app)
                 TestContext.getter('models', () => models)
