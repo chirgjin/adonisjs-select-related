@@ -1,5 +1,5 @@
-import { SelectRelatedOptions } from '@ioc:Adonis/Addons/SelectRelated'
-import { ApplicationContract } from '@ioc:Adonis/Core/Application'
+import type { SelectRelatedOptions } from '@ioc:Adonis/Addons/SelectRelated'
+import type { ApplicationContract } from '@ioc:Adonis/Core/Application'
 
 /*
 |--------------------------------------------------------------------------
@@ -18,7 +18,7 @@ export default class SelectRelatedProvider {
 
     public register() {
         // Register your own bindings
-        this.app.container.bind('Adonis/Addons/SelectRelated', () => {
+        this.app.container.singleton('Adonis/Addons/SelectRelated', () => {
             return {
                 selectRelatedMixin: require('../src/mixin').default,
             }
