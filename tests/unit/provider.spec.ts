@@ -1,9 +1,8 @@
-import SelectRelatedProvider from '../providers/SelectRelatedProvider'
-import selectRelatedMixin from '../src/mixin'
+import SelectRelatedProvider from '../../providers/SelectRelatedProvider'
+import selectRelatedMixin from '../../src/mixin'
+import { getSelectRelatedModels } from '../utils'
 import { test } from '@japa/runner'
 import sinon from 'sinon'
-
-import { getSelectRelatedModels } from './utils'
 
 test.group('SelectRelatedProvider | register', () => {
     test('should register binding successfully', ({ assert, application }) => {
@@ -50,7 +49,7 @@ test.group('SelectRelatedProvider | boot', (group) => {
         application,
     }) => {
         const provider = new SelectRelatedProvider(application)
-        const queryBuilder = await import('../src/querybuilder')
+        const queryBuilder = await import('../../src/querybuilder')
         const stub = sinon.stub(queryBuilder, 'selectRelated')
         const ModelQueryBuilder = application.container.use(
             'Adonis/Lucid/Database'

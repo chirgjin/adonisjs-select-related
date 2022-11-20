@@ -1,9 +1,8 @@
-import { getCol, hasSelect, sideloadColumns } from '../src/helpers'
+import { getCol, hasSelect, sideloadColumns } from '../../src/helpers'
+import { UserModelType } from '../utils'
 import { test } from '@japa/runner'
 
 import { SideloadedRelations } from '@ioc:Adonis/Addons/SelectRelated'
-
-import { UserModelType } from './utils'
 
 test.group('Helpers | hasSelect', async () => {
     test('returns true when there is a single select * statement', ({

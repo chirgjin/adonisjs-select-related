@@ -5,7 +5,7 @@ import { specReporter } from '@japa/spec-reporter'
 
 import { ApplicationContract } from '@ioc:Adonis/Core/Application'
 
-import { cleanup, getModels, setupApplication } from './tests/utils'
+import { setupApplication, cleanup, getModels } from './utils'
 
 let app: ApplicationContract
 

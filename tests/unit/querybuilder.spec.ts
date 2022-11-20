@@ -1,12 +1,11 @@
-import { selectRelated } from '../src/querybuilder'
+import { selectRelated } from '../../src/querybuilder'
+import { TodoListItemModelType, UserModelType } from '../utils'
 import { test } from '@japa/runner'
 
 import {
     ModelQueryBuilderContract,
     SelectRelatedMethods,
 } from '@ioc:Adonis/Lucid/Orm'
-
-import { TodoListItemModelType, UserModelType } from './utils'
 
 test.group('queryBuilder | selectRelated', () => {
     test('applies inner join correctly on single level relations', ({

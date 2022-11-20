@@ -1,3 +1,4 @@
+import { getSelectRelatedModels } from '../utils'
 import { test } from '@japa/runner'
 import sinon from 'sinon'
 
@@ -5,8 +6,6 @@ import {
     ModelQueryBuilderContract,
     SelectRelatedMethods,
 } from '@ioc:Adonis/Lucid/Orm'
-
-import { getSelectRelatedModels } from './utils'
 
 test.group('selectRelatedMixin', () => {
     test('mixin is applied correctly on a lucid model', async ({
@@ -53,10 +52,10 @@ test.group('selectRelatedMixin', () => {
 test.group(
     'selectRelatedMixin | $processSideloadedRelationsBeforeQuery',
     (group) => {
-        let helpers: typeof import('../src/helpers')
+        let helpers: typeof import('../../src/helpers')
 
         group.setup(async () => {
-            helpers = await import('../src/helpers')
+            helpers = await import('../../src/helpers')
         })
 
         group.each.teardown(() => {
