@@ -1,13 +1,9 @@
-import {
+import type {
     SideloadedRelation,
     SideloadedRelations,
 } from '@ioc:Adonis/Addons/SelectRelated'
-import { NormalizeConstructor } from '@ioc:Adonis/Core/Helpers'
-import {
-    afterFetch,
-    afterFind,
-    beforeFetch,
-    beforeFind,
+import type { NormalizeConstructor } from '@ioc:Adonis/Core/Helpers'
+import type {
     LucidModel,
     ModelQueryBuilderContract,
     SelectRelatedMethods,
@@ -30,13 +26,14 @@ export default function selectRelatedMixin<
          * {@link ModelQueryBuilderContract.rowTransformer}. Also, selects columns
          * for preloading using {@link sideloadColumns}
          */
-        @beforeFind()
-        @beforeFetch()
         public static $processSideloadedRelationsBeforeQuery(
             query: ModelQueryBuilderContract<T, InstanceType<T>> &
                 SelectRelatedMethods<T>
         ) {
-            if (!query.$sideloadedRelations) {
+            if (
+                !query.$sideloadedRelations ||
+                Object.keys(query.$sideloadedRelations).length < 1
+            ) {
                 return
             }
 
@@ -60,7 +57,6 @@ export default function selectRelatedMixin<
         /**
          * Function to process the sideloaded columns and make instances from them.
          */
-        @afterFind()
         public static async $processSideloadedRelationsAfterFind<
             Model extends typeof SelectRelatedMixin
         >(this: Model, instance: InstanceType<Model>) {
@@ -128,7 +124,6 @@ export default function selectRelatedMixin<
          *
          * TODO: optimize code for `afterFetch` hook
          */
-        @afterFetch()
         public static async $processSideloadedRelationsAfterFetch(
             instances: InstanceType<T>[]
         ) {
@@ -137,6 +132,24 @@ export default function selectRelatedMixin<
             }
         }
     }
+
+    SelectRelatedMixin.boot()
+    SelectRelatedMixin.before(
+        'find',
+        SelectRelatedMixin.$processSideloadedRelationsBeforeQuery
+    )
+    SelectRelatedMixin.before(
+        'fetch',
+        SelectRelatedMixin.$processSideloadedRelationsBeforeQuery
+    )
+    SelectRelatedMixin.after(
+        'find',
+        SelectRelatedMixin.$processSideloadedRelationsAfterFind
+    )
+    SelectRelatedMixin.after(
+        'fetch',
+        SelectRelatedMixin.$processSideloadedRelationsAfterFetch
+    )
 
     return SelectRelatedMixin
 }
