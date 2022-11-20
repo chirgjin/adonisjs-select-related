@@ -349,7 +349,8 @@ test.group(
 
             await models.TodoList.$processSideloadedRelationsAfterFind(instance)
 
-            assert.notExists(instance.items)
+            assert.isArray(instance.items)
+            assert.isEmpty(instance.items)
             assert.notExists(instance.user)
         })
     }
