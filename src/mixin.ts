@@ -80,7 +80,7 @@ export default function selectRelatedMixin<
                     sideloadedRelations[relationName]
 
                 if (!sideload) {
-                    return
+                    continue
                 }
 
                 const colPrefix = `_${tableName}`
@@ -91,10 +91,19 @@ export default function selectRelatedMixin<
                 const data: Record<string, any> = {}
 
                 relatedModel.$columnsDefinitions.forEach((column, key) => {
-                    data[column.columnName] =
-                        parentInstance.$extras[`${colPrefix}${key}`]
-                    delete parentInstance.$extras[`${colPrefix}${key}`]
+                    const mappingKey = `${colPrefix}${key}`
+
+                    if (mappingKey in parentInstance.$extras) {
+                        data[column.columnName] =
+                            parentInstance.$extras[mappingKey]
+                        delete parentInstance.$extras[mappingKey]
+                    }
                 })
+
+                if (Object.keys(data).length < 1) {
+                    // no rows were matched during an outer join
+                    continue
+                }
 
                 const childInstance = relatedModel.$createFromAdapterResult(
                     data,
