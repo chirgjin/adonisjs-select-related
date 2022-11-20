@@ -95,6 +95,11 @@ declare module '@ioc:Adonis/Addons/SelectRelated' {
             this: Model,
             instances: InstanceType<Model>[]
         ): Promise<void>
+
+        new (): InstanceType<T> & {
+            $sideloadedRelations?: SideloadedRelations<any>
+            $sideloadedRelationParent?: InstanceType<LucidModel>
+        }
     }
 
     /**
