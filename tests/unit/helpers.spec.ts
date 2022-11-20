@@ -1,8 +1,9 @@
 import { getCol, hasSelect, sideloadColumns } from '../../src/helpers'
-import { UserModelType } from '../utils'
+import { getColStub, UserModelType } from '../utils'
 import { test } from '@japa/runner'
+import sinon from 'sinon'
 
-import { SideloadedRelations } from '@ioc:Adonis/Addons/SelectRelated'
+import type { SideloadedRelations } from '@ioc:Adonis/Addons/SelectRelated'
 
 test.group('Helpers | hasSelect', async () => {
     test('returns true when there is a single select * statement', ({
@@ -48,7 +49,13 @@ test.group('Helpers | getCol', async () => {
     })
 })
 
-test.group('Helpers | sideloadColumns', async () => {
+test.group('Helpers | sideloadColumns', async (group) => {
+    group.setup(async () => {
+        await getColStub(group.models)
+
+        return () => sinon.restore()
+    })
+
     test('generates correct column mapping for single level relation when sideloaded is true with * as columns', async ({
         assert,
         models,

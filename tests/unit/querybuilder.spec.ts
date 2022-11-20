@@ -1,13 +1,20 @@
 import { selectRelated } from '../../src/querybuilder'
-import { TodoListItemModelType, UserModelType } from '../utils'
+import { getColStub, TodoListItemModelType, UserModelType } from '../utils'
 import { test } from '@japa/runner'
+import sinon from 'sinon'
 
-import {
+import type {
     ModelQueryBuilderContract,
     SelectRelatedMethods,
 } from '@ioc:Adonis/Lucid/Orm'
 
-test.group('queryBuilder | selectRelated', () => {
+test.group('queryBuilder | selectRelated', (group) => {
+    group.setup(async () => {
+        await getColStub(group.models)
+
+        return () => sinon.restore()
+    })
+
     test('applies inner join correctly on single level relations', ({
         assert,
         models,
