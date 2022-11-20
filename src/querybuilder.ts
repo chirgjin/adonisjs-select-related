@@ -80,7 +80,7 @@ export function selectRelated<Model extends typeof BaseModel>(
                 part as ExtractJoinableRelations<InstanceType<Model>>
             ]!.subRelations
         model = relatedModel
-        lastPart = part
+        lastPart = relationName
     })
 
     return query

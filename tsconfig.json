@@ -10,5 +10,6 @@
         "sourceMap": true,
         "paths": {},
         "types": ["@adonisjs/core", "@adonisjs/lucid"]
-    }
+    },
+    "exclude": ["./node_modules", "./build", "./tests/*"]
 }

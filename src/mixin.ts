@@ -1,13 +1,9 @@
-import {
+import type {
     SideloadedRelation,
     SideloadedRelations,
 } from '@ioc:Adonis/Addons/SelectRelated'
-import { NormalizeConstructor } from '@ioc:Adonis/Core/Helpers'
-import {
-    afterFetch,
-    afterFind,
-    beforeFetch,
-    beforeFind,
+import type { NormalizeConstructor } from '@ioc:Adonis/Core/Helpers'
+import type {
     LucidModel,
     ModelQueryBuilderContract,
     SelectRelatedMethods,
@@ -30,13 +26,14 @@ export default function selectRelatedMixin<
          * {@link ModelQueryBuilderContract.rowTransformer}. Also, selects columns
          * for preloading using {@link sideloadColumns}
          */
-        @beforeFind()
-        @beforeFetch()
         public static $processSideloadedRelationsBeforeQuery(
             query: ModelQueryBuilderContract<T, InstanceType<T>> &
                 SelectRelatedMethods<T>
         ) {
-            if (!query.$sideloadedRelations) {
+            if (
+                !query.$sideloadedRelations ||
+                Object.keys(query.$sideloadedRelations).length < 1
+            ) {
                 return
             }
 
@@ -46,9 +43,7 @@ export default function selectRelatedMixin<
                 query.select(`${query.model.table}.*`)
             }
 
-            const columnMapping: Record<string, string> = {}
-
-            sideloadColumns(query, columnMapping, $sideloadedRelations)
+            const columnMapping = sideloadColumns(query, $sideloadedRelations)
 
             query.rowTransformer((row: SelectRelatedMixin) => {
                 row.$sideloadedRelations = $sideloadedRelations
@@ -62,7 +57,6 @@ export default function selectRelatedMixin<
         /**
          * Function to process the sideloaded columns and make instances from them.
          */
-        @afterFind()
         public static async $processSideloadedRelationsAfterFind<
             Model extends typeof SelectRelatedMixin
         >(this: Model, instance: InstanceType<Model>) {
@@ -86,7 +80,7 @@ export default function selectRelatedMixin<
                     sideloadedRelations[relationName]
 
                 if (!sideload) {
-                    return
+                    continue
                 }
 
                 const colPrefix = `_${tableName}`
@@ -97,10 +91,31 @@ export default function selectRelatedMixin<
                 const data: Record<string, any> = {}
 
                 relatedModel.$columnsDefinitions.forEach((column, key) => {
-                    data[column.columnName] =
-                        parentInstance.$extras[`${colPrefix}${key}`]
-                    delete parentInstance.$extras[`${colPrefix}${key}`]
+                    const mappingKey = `${colPrefix}${key}`
+
+                    if (mappingKey in parentInstance.$extras) {
+                        data[column.columnName] =
+                            parentInstance.$extras[mappingKey]
+                        delete parentInstance.$extras[mappingKey]
+                    }
                 })
+
+                if (
+                    Object.keys(data).filter(
+                        (key) => data[key] !== undefined && data[key] !== null
+                    ).length < 1
+                ) {
+                    // no rows were matched during an outer join
+                    if (
+                        relation.type === 'hasMany' &&
+                        !instance[relationName]
+                    ) {
+                        // set hasMany relations to empty array for consistency
+                        relation.setRelated(instance, [])
+                    }
+
+                    continue
+                }
 
                 const childInstance = relatedModel.$createFromAdapterResult(
                     data,
@@ -130,15 +145,34 @@ export default function selectRelatedMixin<
          *
          * TODO: optimize code for `afterFetch` hook
          */
-        @afterFetch()
         public static async $processSideloadedRelationsAfterFetch(
             instances: InstanceType<T>[]
         ) {
             for (const instance of instances) {
-                await this.$processSideloadedRelationsAfterFind(instance)
+                const model = instance.constructor as typeof SelectRelatedMixin
+
+                await model.$processSideloadedRelationsAfterFind(instance)
             }
         }
     }
+
+    SelectRelatedMixin.boot()
+    SelectRelatedMixin.before(
+        'find',
+        SelectRelatedMixin.$processSideloadedRelationsBeforeQuery
+    )
+    SelectRelatedMixin.before(
+        'fetch',
+        SelectRelatedMixin.$processSideloadedRelationsBeforeQuery
+    )
+    SelectRelatedMixin.after(
+        'find',
+        SelectRelatedMixin.$processSideloadedRelationsAfterFind
+    )
+    SelectRelatedMixin.after(
+        'fetch',
+        SelectRelatedMixin.$processSideloadedRelationsAfterFetch
+    )
 
     return SelectRelatedMixin
 }

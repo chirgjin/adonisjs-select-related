@@ -12,11 +12,14 @@
         "mrm": "mrm --preset=@adonisjs/mrm-preset",
         "lint": "eslint . --ext=.ts --fix",
         "compile": "yarn lint && yarn format && yarn build",
-        "build": "node -r @adonisjs/require-ts/build/register build.ts",
+        "build": "yarn ts build.ts",
         "prepublishOnly": "yarn compile && yarn make:changelog",
         "format": "prettier --write .",
         "prepare": "husky install",
-        "make:changelog": "conventional-changelog -i CHANGELOG.md -s"
+        "make:changelog": "conventional-changelog -i CHANGELOG.md -s",
+        "ts": "node -r @adonisjs/require-ts/build/register",
+        "test": "yarn ts tests",
+        "coverage": "c8 yarn test"
     },
     "author": "chirgjin <chirgjin@gmail.com>",
     "license": "UNLICENSED",
@@ -36,8 +39,16 @@
         "@adonisjs/require-ts": "^2.0.9",
         "@commitlint/cli": "^16.1.0",
         "@commitlint/config-conventional": "^16.0.0",
+        "@japa/assert": "^1.3.6",
+        "@japa/run-failed-tests": "^1.1.0",
+        "@japa/runner": "^2.2.2",
+        "@japa/spec-reporter": "^1.3.2",
+        "@poppinss/dev-utils": "^2.0.3",
         "@trivago/prettier-plugin-sort-imports": "^2.0.1",
         "@types/node": "^17.0.10",
+        "@types/sinon": "^10.0.13",
+        "@vscode/sqlite3": "^5.1.2-vscode",
+        "c8": "^7.12.0",
         "conventional-changelog-cli": "^2.2.2",
         "eslint": "^8.7.0",
         "eslint-config-prettier": "^8.3.0",
@@ -49,6 +60,7 @@
         "mrm": "^3.0.10",
         "prettier": "^2.5.1",
         "reflect-metadata": "^0.1.13",
+        "sinon": "^14.0.2",
         "typescript": "^4.5.5"
     },
     "peerDependencies": {
@@ -70,5 +82,8 @@
     "typings": "./build/adonis-typings/index.d.ts",
     "lint-staged": {
         "*.ts": "eslint --cache --fix"
+    },
+    "dependencies": {
+        "@poppinss/hooks": "^5.0.3"
     }
 }
