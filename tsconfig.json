@@ -11,9 +11,5 @@
         "paths": {},
         "types": ["@adonisjs/core", "@adonisjs/lucid"]
     },
-    "exclude": [
-        "./node_modules",
-        "./build",
-        "./tests/*"
-    ]
+    "exclude": ["./node_modules", "./build", "./tests/*"]
 }

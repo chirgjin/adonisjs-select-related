@@ -4,3 +4,4 @@ docs
 config.json
 *.html
 *.txt
+coverage
