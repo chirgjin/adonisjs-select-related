@@ -8,4 +8,10 @@ declare module '@japa/runner' {
         application: ApplicationContract
         models: ReturnType<typeof getModels>
     }
+
+    // eslint-disable-next-line no-unused-vars
+    interface Group {
+        application: ApplicationContract
+        models: ReturnType<typeof getModels>
+    }
 }

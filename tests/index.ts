@@ -1,6 +1,12 @@
 import { assert } from '@japa/assert'
 import { runFailedTests } from '@japa/run-failed-tests'
-import { configure, processCliArgs, run, TestContext } from '@japa/runner'
+import {
+    configure,
+    processCliArgs,
+    run,
+    TestContext,
+    Group,
+} from '@japa/runner'
 import { specReporter } from '@japa/spec-reporter'
 
 import { ApplicationContract } from '@ioc:Adonis/Core/Application'
@@ -38,6 +44,9 @@ configure({
 
                 TestContext.getter('application', () => app)
                 TestContext.getter('models', () => models)
+
+                Group.getter('application', () => app)
+                Group.getter('models', () => models)
             },
         ],
         teardown: [
