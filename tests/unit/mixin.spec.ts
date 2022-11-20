@@ -53,9 +53,11 @@ test.group(
     'selectRelatedMixin | $processSideloadedRelationsBeforeQuery',
     (group) => {
         let helpers: typeof import('../../src/helpers')
+        let models: ReturnType<typeof getSelectRelatedModels>
 
         group.setup(async () => {
             helpers = await import('../../src/helpers')
+            models = getSelectRelatedModels(group.application)
         })
 
         group.each.teardown(() => {
@@ -64,15 +66,13 @@ test.group(
 
         test('does nothing if sideloadedRelations are not defined', ({
             assert,
-            application,
         }) => {
-            const models = getSelectRelatedModels(application)
             const query = models.User.query() as ModelQueryBuilderContract<
                 typeof models.User
             > &
                 SelectRelatedMethods<typeof models.User>
-            const hasSelectSpy = sinon.stub(helpers, 'hasSelect')
-            const sideloadColumnsSpy = sinon.stub(helpers, 'sideloadColumns')
+            const hasSelectSpy = sinon.spy(helpers, 'hasSelect')
+            const sideloadColumnsSpy = sinon.spy(helpers, 'sideloadColumns')
 
             query.$sideloadedRelations = undefined
 
@@ -85,15 +85,13 @@ test.group(
 
         test('does not add select statements if sideloaded relations is empty', ({
             assert,
-            application,
         }) => {
-            const models = getSelectRelatedModels(application)
             const query = models.User.query() as ModelQueryBuilderContract<
                 typeof models.User
             > &
                 SelectRelatedMethods<typeof models.User>
-            const hasSelectSpy = sinon.stub(helpers, 'hasSelect')
-            const sideloadColumnsSpy = sinon.stub(helpers, 'sideloadColumns')
+            const hasSelectSpy = sinon.spy(helpers, 'hasSelect')
+            const sideloadColumnsSpy = sinon.spy(helpers, 'sideloadColumns')
 
             query.$sideloadedRelations = {}
 
@@ -106,15 +104,13 @@ test.group(
 
         test('query with sideloadedRelations gets appropriate select statements', ({
             assert,
-            application,
         }) => {
-            const models = getSelectRelatedModels(application)
             const query = models.User.query() as ModelQueryBuilderContract<
                 typeof models.User
             > &
                 SelectRelatedMethods<typeof models.User>
-            const hasSelectSpy = sinon.stub(helpers, 'hasSelect')
-            const sideloadColumnsSpy = sinon.stub(helpers, 'sideloadColumns')
+            const hasSelectStub = sinon.stub(helpers, 'hasSelect')
+            const sideloadColumnsStub = sinon.stub(helpers, 'sideloadColumns')
             const relation = models.User.$getRelation('todoLists')
 
             query.$sideloadedRelations = {
@@ -126,8 +122,8 @@ test.group(
                     subRelations: {},
                 },
             }
-            hasSelectSpy.withArgs(query).returns(false)
-            sideloadColumnsSpy
+            hasSelectStub.withArgs(query).returns(false)
+            sideloadColumnsStub
                 .withArgs(query, query.$sideloadedRelations)
                 .returns({
                     _todoListsid: 'todoLists.id',
@@ -136,9 +132,9 @@ test.group(
 
             models.User.$processSideloadedRelationsBeforeQuery(query)
 
-            assert.isTrue(hasSelectSpy.calledOnceWith(query))
+            assert.isTrue(hasSelectStub.calledOnceWith(query))
             assert.isTrue(
-                sideloadColumnsSpy.calledOnceWith(
+                sideloadColumnsStub.calledOnceWith(
                     query,
                     query.$sideloadedRelations
                 )
@@ -154,15 +150,15 @@ test.group(
 test.group(
     'selectRelatedMixin | $processSideloadedRelationsAfterFind',
     (group) => {
-        group.each.teardown(() => {
-            sinon.restore()
+        let models: ReturnType<typeof getSelectRelatedModels>
+
+        group.setup(async () => {
+            models = getSelectRelatedModels(group.application)
         })
 
         test('does nothing if sideloaded relations are not defined', async ({
             assert,
-            application,
         }) => {
-            const models = getSelectRelatedModels(application)
             const instance = new models.User()
             instance.$sideloadedRelations = undefined
 
@@ -173,9 +169,7 @@ test.group(
 
         test('creates instance of user & items both when sideloaded relation is provided', async ({
             assert,
-            application,
         }) => {
-            const models = getSelectRelatedModels(application)
             const instance = new models.TodoList()
             const userRelation = models.TodoList.$getRelation('user')
             const itemsRelation = models.TodoList.$getRelation('items')
@@ -220,10 +214,7 @@ test.group(
 
         test('creates instance of related objects when nested sideloaded relation is provided', async ({
             assert,
-            application,
         }) => {
-            const models = getSelectRelatedModels(application)
-
             const user = new models.User()
             const todoListRelation = models.User.$getRelation('todoLists')
             const todoItemRelation = models.TodoList.$getRelation('items')
@@ -274,9 +265,7 @@ test.group(
 
         test('does not create instances when sideload is false', async ({
             assert,
-            application,
         }) => {
-            const models = getSelectRelatedModels(application)
             const instance = new models.TodoList()
             const userRelation = models.TodoList.$getRelation('user')
             const itemsRelation = models.TodoList.$getRelation('items')
@@ -320,9 +309,7 @@ test.group(
 
         test('does not create instances when outer join is applied and no rows are matched', async ({
             assert,
-            application,
         }) => {
-            const models = getSelectRelatedModels(application)
             const instance = new models.TodoList()
             const userRelation = models.TodoList.$getRelation('user')
             const itemsRelation = models.TodoList.$getRelation('items')
@@ -359,17 +346,21 @@ test.group(
 test.group(
     'selectRelatedMixin | $processSideloadedRelationsAfterFetch',
     (group) => {
+        let models: ReturnType<typeof getSelectRelatedModels>
+
+        group.setup(async () => {
+            models = getSelectRelatedModels(group.application)
+        })
+
         group.each.teardown(() => {
             sinon.restore()
         })
 
         test('calls $processSideloadedRelationsAfterFind for every instance', async ({
             assert,
-            application,
         }) => {
-            const models = getSelectRelatedModels(application)
             const instances = [new models.User(), new models.User()]
-            const spy = sinon.stub(
+            const stub = sinon.stub(
                 models.User,
                 '$processSideloadedRelationsAfterFind'
             )
@@ -377,24 +368,22 @@ test.group(
             await models.User.$processSideloadedRelationsAfterFetch(instances)
 
             instances.forEach((instance) => {
-                assert.isTrue(spy.calledWith(instance))
+                assert.isTrue(stub.calledWith(instance))
             })
-            assert.isTrue(spy.calledTwice)
+            assert.isTrue(stub.calledTwice)
         })
 
         test('never calls $processSideloadedRelationsAfterFind if empty array is provided', async ({
             assert,
-            application,
         }) => {
-            const models = getSelectRelatedModels(application)
-            const spy = sinon.stub(
+            const stub = sinon.stub(
                 models.User,
                 '$processSideloadedRelationsAfterFind'
             )
 
             await models.User.$processSideloadedRelationsAfterFetch([])
 
-            assert.isFalse(spy.called)
+            assert.isFalse(stub.called)
         })
     }
 )
