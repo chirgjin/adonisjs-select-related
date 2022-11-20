@@ -9,6 +9,7 @@ jobs:
   build:
     <<: *defaults
     steps:
+      - run: apk add python
       - checkout
       - restore_cache:
           keys:
