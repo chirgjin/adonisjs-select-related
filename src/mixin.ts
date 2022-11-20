@@ -100,8 +100,20 @@ export default function selectRelatedMixin<
                     }
                 })
 
-                if (Object.keys(data).length < 1) {
+                if (
+                    Object.keys(data).filter(
+                        (key) => data[key] !== undefined && data[key] !== null
+                    ).length < 1
+                ) {
                     // no rows were matched during an outer join
+                    if (
+                        relation.type === 'hasMany' &&
+                        !instance[relationName]
+                    ) {
+                        // set hasMany relations to empty array for consistency
+                        relation.setRelated(instance, [])
+                    }
+
                     continue
                 }
 
@@ -137,7 +149,9 @@ export default function selectRelatedMixin<
             instances: InstanceType<T>[]
         ) {
             for (const instance of instances) {
-                await this.$processSideloadedRelationsAfterFind(instance)
+                const model = instance.constructor as typeof SelectRelatedMixin
+
+                await model.$processSideloadedRelationsAfterFind(instance)
             }
         }
     }
