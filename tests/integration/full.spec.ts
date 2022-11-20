@@ -12,12 +12,14 @@ import { ApplicationContract } from '@ioc:Adonis/Core/Application'
 
 test.group('Integration Test', (group) => {
     let application: ApplicationContract
+    let models: ReturnType<typeof getSelectRelatedModels>
 
     group.setup(async () => {
         // create a separate application instance which has selectRelatedProvider loaded
         application = await setupApplication([
             join(__dirname, '../../providers/SelectRelatedProvider'),
         ])
+        models = getSelectRelatedModels(application)
 
         return async () => {
             const db = application.container.use('Adonis/Lucid/Database')
@@ -27,11 +29,11 @@ test.group('Integration Test', (group) => {
     })
 
     group.each.setup(async () => {
+        // clear all data before every test
         await reset(application)
     })
 
     test('loads both belongsTo & hasMany relations', async ({ assert }) => {
-        const models = getSelectRelatedModels(application)
         await createUsers({
             model: models.User,
             count: 2,
@@ -51,6 +53,7 @@ test.group('Integration Test', (group) => {
         assert.lengthOf(todoLists, 4)
 
         todoLists.forEach((todoList) => {
+            // every todoList should have user & exactly 1 item
             assert.instanceOf(todoList, models.TodoList)
 
             assert.instanceOf(todoList.user, models.User)
@@ -66,7 +69,6 @@ test.group('Integration Test', (group) => {
     test('does not create instances when no rows are matched during outer join', async ({
         assert,
     }) => {
-        const models = getSelectRelatedModels(application)
         const user = (
             await createUsers({
                 model: models.User,
@@ -118,8 +120,6 @@ test.group('Integration Test', (group) => {
     })
 
     test('creates instances in a recursive relation', async ({ assert }) => {
-        const models = getSelectRelatedModels(application)
-
         const createduser = await models.User.query()
             .where(
                 'id',
@@ -137,14 +137,56 @@ test.group('Integration Test', (group) => {
                 )[0].id
             )
             .preload('todoLists', (query) =>
-                query.preload('items', (builder) => builder.preload('todoList'))
+                query.preload('items', (builder) =>
+                    builder.preload('todoList', (q) => q.preload('user'))
+                )
             )
             .firstOrFail()
 
         const user = await models.User.query()
-            .selectRelated('todoLists.items.todoList')
+            .selectRelated('todoLists.items.todoList.user')
             .firstOrFail()
 
         assert.deepEqual(user.toJSON(), createduser.toJSON())
+    })
+
+    test('applies joins even when sideloaded is false', async ({ assert }) => {
+        const user = (
+            await createUsers({
+                model: models.User,
+                count: 1,
+            })
+        )[0]
+        const todoList = (
+            await createTodoLists({
+                user,
+                count: 1,
+                items: {
+                    count: 1,
+                    completed: true,
+                },
+            })
+        )[0]
+
+        // create an incomplete item to ensure that where condition is applied correctly
+        await createTodoLists({
+            user,
+            count: 1,
+            items: {
+                count: 1,
+            },
+        })
+
+        const todoLists = await models.TodoList.query()
+            .selectRelated('items', {
+                sideload: false,
+            })
+            .whereNotNull('items.completed_at')
+
+        assert.isArray(todoLists)
+        assert.lengthOf(todoLists, 1)
+        assert.instanceOf(todoLists[0], models.TodoList)
+        assert.strictEqual(todoLists[0].id, todoList.id)
+        assert.notExists(todoLists[0].items)
     })
 })
