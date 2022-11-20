@@ -18,7 +18,8 @@
         "prepare": "husky install",
         "make:changelog": "conventional-changelog -i CHANGELOG.md -s",
         "ts": "node -r @adonisjs/require-ts/build/register",
-        "test": "yarn ts test.ts"
+        "test": "yarn ts tests",
+        "coverage": "c8 yarn test"
     },
     "author": "chirgjin <chirgjin@gmail.com>",
     "license": "UNLICENSED",
