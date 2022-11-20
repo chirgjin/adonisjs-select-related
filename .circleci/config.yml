@@ -1,0 +1,39 @@
+version: 2.1
+
+defaults: &defaults
+  working_directory: ~/app
+  docker:
+    - image: node:16.0.0-alpine
+
+jobs:
+  build:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - dependencies-{{ checksum "package.json" }}
+      - run: "yarn"
+      - run: "yarn compile"
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+      - persist_to_workspace:
+          root: ~/app
+          paths:
+            - .
+  test:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/app
+      - run: "yarn test"
+
+workflows:
+  test:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
