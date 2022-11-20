@@ -1,11 +1,13 @@
+import selectRelatedMixin from '../../src/mixin'
 import { Application } from '@adonisjs/core/build/standalone'
 import { Filesystem } from '@poppinss/dev-utils'
 import { DateTime } from 'luxon'
 import { join, posix, sep } from 'path'
 import 'reflect-metadata'
 
+import { SelectRelatedContract } from '@ioc:Adonis/Addons/SelectRelated'
 import { ApplicationContract } from '@ioc:Adonis/Core/Application'
-import type { BelongsTo, HasMany } from '@ioc:Adonis/Lucid/Orm'
+import type { BelongsTo, HasMany, LucidModel } from '@ioc:Adonis/Lucid/Orm'
 
 export const fs = new Filesystem(join(__dirname, '__app'))
 export type UserModelType = ReturnType<typeof getModels>['User']
@@ -122,11 +124,16 @@ export async function createTables(application: ApplicationContract) {
 /**
  * Returns the models for User, TodoList & TodoListItem
  */
-export function getModels(application: ApplicationContract) {
+export function getModels(
+    application: ApplicationContract,
+    baseModel?: LucidModel
+) {
     const { BaseModel, column, hasMany, belongsTo } =
         application.container.use('Adonis/Lucid/Orm')
 
-    class User extends BaseModel {
+    const base = baseModel || BaseModel
+
+    class User extends base {
         @column({
             isPrimary: true,
         })
@@ -145,7 +152,7 @@ export function getModels(application: ApplicationContract) {
         public todoLists: HasMany<typeof TodoList>
     }
 
-    class TodoList extends BaseModel {
+    class TodoList extends base {
         @column({
             isPrimary: true,
         })
@@ -167,7 +174,7 @@ export function getModels(application: ApplicationContract) {
         public items: HasMany<typeof TodoListItem>
     }
 
-    class TodoListItem extends BaseModel {
+    class TodoListItem extends base {
         @column({ isPrimary: true })
         public id: number
 
@@ -191,6 +198,28 @@ export function getModels(application: ApplicationContract) {
         User,
         TodoList,
         TodoListItem,
+    }
+}
+
+/**
+ * Returns the models for User, TodoList & TodoListItem with selectRelatedMixin applied on them.
+ * Uses {@link getModels} but attaches the correct return type to it.
+ */
+export function getSelectRelatedModels(application: ApplicationContract) {
+    const { User, TodoList, TodoListItem } = getModels(
+        application,
+        selectRelatedMixin(
+            application.container.use('Adonis/Lucid/Orm').BaseModel
+        )
+    )
+
+    return {
+        User: User as SelectRelatedContract<UserModelType> & UserModelType,
+        TodoList: TodoList as SelectRelatedContract<TodoListModelType> &
+            TodoListModelType,
+        TodoListItem:
+            TodoListItem as SelectRelatedContract<TodoListItemModelType> &
+                TodoListItemModelType,
     }
 }
 
