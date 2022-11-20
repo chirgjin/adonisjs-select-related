@@ -4,6 +4,7 @@ import { Filesystem } from '@poppinss/dev-utils'
 import { DateTime } from 'luxon'
 import { join, posix, sep } from 'path'
 import 'reflect-metadata'
+import sinon from 'sinon'
 
 import { SelectRelatedContract } from '@ioc:Adonis/Addons/SelectRelated'
 import { ApplicationContract } from '@ioc:Adonis/Core/Application'
@@ -343,4 +344,42 @@ export async function cleanup(application: ApplicationContract) {
 export async function reset(application: ApplicationContract) {
     const db = application.container.use('Adonis/Lucid/Database')
     await db.connection().truncate('users')
+}
+
+/**
+ * Generates sinon stub for getCol method with complete model mappings
+ */
+export async function getColStub(models: ReturnType<typeof getModels>) {
+    const helpers = await import('../../src/helpers')
+
+    const columnMappings = new Map<LucidModel, Record<string, string>>()
+    columnMappings.set(models.User, {
+        id: 'id',
+        username: 'username',
+        password: 'password',
+        createdAt: 'created_at',
+    })
+    columnMappings.set(models.TodoList, {
+        id: 'id',
+        userId: 'user_id',
+        title: 'title',
+        createdAt: 'created_at',
+    })
+    columnMappings.set(models.TodoListItem, {
+        id: 'id',
+        todoListId: 'todo_list_id',
+        content: 'content',
+        completedAt: 'completed_at',
+        createdAt: 'created_at',
+    })
+
+    const stub = sinon.stub(helpers, 'getCol')
+
+    for (const [model, mapping] of columnMappings.entries()) {
+        Object.keys(mapping).forEach((field) => {
+            stub.withArgs(model, field).returns(mapping[field])
+        })
+    }
+
+    return stub
 }
