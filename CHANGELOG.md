@@ -1,3 +1,10 @@
+## <small>1.1.1 (2023-01-10)</small>
+
+* fix: accept ...args in constructor ([26f9028](https://github.com/chirgjin/adonisjs-select-related/commit/26f9028))
+* docs: changelog for v1.1.0 ([da594de](https://github.com/chirgjin/adonisjs-select-related/commit/da594de))
+
+
+
 ## 1.1.0 (2023-01-10)
 
 * docs: add more examples & explanation ([1b5245e](https://github.com/chirgjin/adonisjs-select-related/commit/1b5245e))
