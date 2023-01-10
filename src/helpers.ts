@@ -1,5 +1,5 @@
-import { SideloadedRelations } from '@ioc:Adonis/Addons/SelectRelated'
-import {
+import type { SideloadedRelations } from '@ioc:Adonis/Addons/SelectRelated'
+import type {
     BaseRelationContract,
     LucidModel,
     ModelQueryBuilderContract,

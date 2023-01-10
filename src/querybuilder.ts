@@ -1,8 +1,8 @@
-import {
+import type {
     ExtractJoinableRelations,
     SelectRelatedOptions,
 } from '@ioc:Adonis/Addons/SelectRelated'
-import {
+import type {
     BaseModel,
     ModelQueryBuilderContract,
     SelectRelatedMethods,
