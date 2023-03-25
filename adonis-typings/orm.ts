@@ -14,25 +14,19 @@ declare module '@ioc:Adonis/Lucid/Orm' {
         Model extends LucidModel,
         Result = InstanceType<Model>
     > {
-        selectRelated(
-            name: string,
-            options?: SelectRelatedOptions
-        ): ModelQueryBuilderContract<Model, Result>
-        $sideloadedRelations?: SideloadedRelations<Model>
-    }
-
-    /**
-     * Type which excludes select related methods if the model
-     * doesn't have selectRelatedMixin
-     */
-    type SelectRelatedQueryBuilder<Model extends LucidModel> = {
-        [Key in keyof SelectRelatedMethods<Model> as Model extends SelectRelatedContract<LucidModel>
-            ? Key
-            : never]: SelectRelatedMethods<Model>[Key]
+        selectRelated: Model extends SelectRelatedContract<LucidModel>
+            ? (
+                  name: string,
+                  options?: SelectRelatedOptions
+              ) => ModelQueryBuilderContract<Model, Result>
+            : never
+        $sideloadedRelations?: Model extends SelectRelatedContract<LucidModel>
+            ? SideloadedRelations<Model>
+            : never
     }
 
     interface ModelQueryBuilderContract<
         Model extends LucidModel,
         Result = InstanceType<Model>
-    > extends SelectRelatedQueryBuilder<Model> {}
+    > extends SelectRelatedMethods<Model, Result> {}
 }
