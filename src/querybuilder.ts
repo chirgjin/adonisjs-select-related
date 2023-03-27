@@ -5,7 +5,7 @@ import type {
 import type {
     BaseModel,
     ModelQueryBuilderContract,
-    SelectRelatedMethods,
+    SelectRelatedQueryMethods,
 } from '@ioc:Adonis/Lucid/Orm'
 
 import { getCol, isRelationSubType } from './helpers'
@@ -16,7 +16,11 @@ import { getCol, isRelationSubType } from './helpers'
  * and creates relatedModel's instance from them if sideload is True.
  */
 export function selectRelated<Model extends typeof BaseModel>(
-    query: ModelQueryBuilderContract<Model> & SelectRelatedMethods<Model>,
+    query: Omit<
+        ModelQueryBuilderContract<Model>,
+        keyof SelectRelatedQueryMethods<Model>
+    > &
+        SelectRelatedQueryMethods<Model>,
     name: string,
     { sideload = true, columns = '*', joinType = 'inner' }: SelectRelatedOptions
 ) {

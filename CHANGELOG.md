@@ -1,3 +1,11 @@
+## <small>1.1.2 (2023-03-25)</small>
+
+* fix: orm typing ([ef0347b](https://github.com/chirgjin/adonisjs-select-related/commit/ef0347b))
+* docs: add LICENSE ([7e33683](https://github.com/chirgjin/adonisjs-select-related/commit/7e33683))
+* docs: changelog for v1.1.1 ([717211e](https://github.com/chirgjin/adonisjs-select-related/commit/717211e))
+
+
+
 ## <small>1.1.1 (2023-01-10)</small>
 
 * fix: accept ...args in constructor ([26f9028](https://github.com/chirgjin/adonisjs-select-related/commit/26f9028))

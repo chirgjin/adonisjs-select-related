@@ -6,7 +6,7 @@ import type { NormalizeConstructor } from '@ioc:Adonis/Core/Helpers'
 import type {
     LucidModel,
     ModelQueryBuilderContract,
-    SelectRelatedMethods,
+    SelectRelatedQueryMethods,
 } from '@ioc:Adonis/Lucid/Orm'
 
 import { hasSelect, sideloadColumns } from './helpers'
@@ -28,7 +28,7 @@ export default function selectRelatedMixin<
          */
         public static $processSideloadedRelationsBeforeQuery(
             query: ModelQueryBuilderContract<T, InstanceType<T>> &
-                SelectRelatedMethods<T>
+                SelectRelatedQueryMethods<T>
         ) {
             if (
                 !query.$sideloadedRelations ||
