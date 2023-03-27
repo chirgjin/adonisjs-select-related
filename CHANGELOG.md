@@ -1,3 +1,9 @@
+## <small>1.1.3 (2023-03-27)</small>
+
+* fix: typings ([6b86a79](https://github.com/chirgjin/adonisjs-select-related/commit/6b86a79))
+
+
+
 ## <small>1.1.2 (2023-03-25)</small>
 
 * fix: orm typing ([ef0347b](https://github.com/chirgjin/adonisjs-select-related/commit/ef0347b))
