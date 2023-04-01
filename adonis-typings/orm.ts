@@ -14,6 +14,10 @@ declare module '@ioc:Adonis/Lucid/Orm' {
         Model extends LucidModel,
         Result = InstanceType<Model>
     > {
+        selectRelated<Name extends ExtractModelRelations<InstanceType<Model>>>(
+            name: Name,
+            options?: SelectRelatedOptions
+        ): ModelQueryBuilderContract<Model, Result>
         selectRelated(
             name: string,
             options?: SelectRelatedOptions
