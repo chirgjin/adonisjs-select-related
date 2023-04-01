@@ -1,3 +1,10 @@
+## 1.2.0 (2023-04-01)
+
+* feat: add relationship types ([db2279d](https://github.com/chirgjin/adonisjs-select-related/commit/db2279d))
+* docs: changelog for v1.1.3 ([2a4272d](https://github.com/chirgjin/adonisjs-select-related/commit/2a4272d))
+
+
+
 ## <small>1.1.3 (2023-03-27)</small>
 
 * fix: typings ([6b86a79](https://github.com/chirgjin/adonisjs-select-related/commit/6b86a79))
