@@ -21,6 +21,19 @@ export default function selectRelatedMixin<
         public $sideloadedRelations?: SideloadedRelations<any>
         public $sideloadedRelationParent?: InstanceType<LucidModel>
 
+        public static boot() {
+            if (this.hasOwnProperty('booted') && this.booted === true) {
+                return
+            }
+
+            super.boot()
+
+            this.before('find', this.$processSideloadedRelationsBeforeQuery)
+            this.before('fetch', this.$processSideloadedRelationsBeforeQuery)
+            this.after('find', this.$processSideloadedRelationsAfterFind)
+            this.after('fetch', this.$processSideloadedRelationsAfterFetch)
+        }
+
         /**
          * Function to pass the sideloaded relations to every row using
          * {@link ModelQueryBuilderContract.rowTransformer}. Also, selects columns
@@ -155,24 +168,6 @@ export default function selectRelatedMixin<
             }
         }
     }
-
-    SelectRelatedMixin.boot()
-    SelectRelatedMixin.before(
-        'find',
-        SelectRelatedMixin.$processSideloadedRelationsBeforeQuery
-    )
-    SelectRelatedMixin.before(
-        'fetch',
-        SelectRelatedMixin.$processSideloadedRelationsBeforeQuery
-    )
-    SelectRelatedMixin.after(
-        'find',
-        SelectRelatedMixin.$processSideloadedRelationsAfterFind
-    )
-    SelectRelatedMixin.after(
-        'fetch',
-        SelectRelatedMixin.$processSideloadedRelationsAfterFetch
-    )
 
     return SelectRelatedMixin
 }
