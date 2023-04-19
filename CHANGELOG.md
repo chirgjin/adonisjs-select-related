@@ -1,3 +1,11 @@
+## <small>1.2.1 (2023-04-19)</small>
+
+* fix: do not force mixin booting ([762509d](https://github.com/chirgjin/adonisjs-select-related/commit/762509d))
+* fix: make sure the property 'booted' exists ([54fc46a](https://github.com/chirgjin/adonisjs-select-related/commit/54fc46a))
+* docs: changelog for v1.2.0 ([4cfe75a](https://github.com/chirgjin/adonisjs-select-related/commit/4cfe75a))
+
+
+
 ## 1.2.0 (2023-04-01)
 
 * feat: add relationship types ([db2279d](https://github.com/chirgjin/adonisjs-select-related/commit/db2279d))
