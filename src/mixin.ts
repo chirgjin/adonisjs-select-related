@@ -22,7 +22,7 @@ export default function selectRelatedMixin<
         public $sideloadedRelationParent?: InstanceType<LucidModel>
 
         public static boot() {
-            if (this.booted) {
+            if (this.hasOwnProperty('booted') && this.booted === true) {
                 return
             }
 
