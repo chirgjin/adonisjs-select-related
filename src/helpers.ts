@@ -48,7 +48,7 @@ export function sideloadColumns<
         const sideloadedRelation = sideloadedRelations[relationName]
 
         if (!sideloadedRelation.sideload) {
-            return columnMapping
+            continue
         }
 
         const colPrefix = `_${sideloadedRelation.tableName}`
