@@ -1,3 +1,10 @@
+## <small>1.2.2 (2023-09-12)</small>
+
+* fix: handle case when one of relations has sideload false ([97cdf78](https://github.com/chirgjin/adonisjs-select-related/commit/97cdf78))
+* docs: changelog for v1.2.1 ([0438e86](https://github.com/chirgjin/adonisjs-select-related/commit/0438e86))
+
+
+
 ## <small>1.2.1 (2023-04-19)</small>
 
 * fix: do not force mixin booting ([762509d](https://github.com/chirgjin/adonisjs-select-related/commit/762509d))
